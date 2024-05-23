@@ -83,13 +83,14 @@ const ToDoPage = () => {
                   </Typography>
                   <Typography variant="h6">
                     {filter
-                      ? `You have no tasks with status ${filter}`
+                      ? `No tasks with status ${filter}`
                       : "You have no tasks at the moment"}
                   </Typography>
                 </Stack>
                 <Typography variant="subtitle1" color="text.secondary">
-                  Start adding tasks to stay organized and productive. Click the
-                  button below to create your first to-do item.
+                  {filter
+                    ? "You have no tasks with the selected status. Try changing the filter or create a new task."
+                    : "Start adding tasks to stay organized and productive. Click the button below to create your first to-do item."}
                 </Typography>
               </Stack>
               <Stack alignItems="center">

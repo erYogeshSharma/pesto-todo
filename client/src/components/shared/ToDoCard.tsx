@@ -17,6 +17,7 @@ import {
   openToDoForm,
   updateToDo,
 } from "../../store/to-do/to-do-slice";
+import confetti from "canvas-confetti";
 import { Delete, Edit, FilterVintage, Spa } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { red, yellow } from "@mui/material/colors";
@@ -26,9 +27,17 @@ const ToDoCard = ({ todo }: { todo: TODO }) => {
 
   const [updatingStatus, setUpdatingStatus] = useState(false);
   async function handleStatusChange(status: ToDoStatus) {
+    if (status === todo.status) return;
     try {
       setUpdatingStatus(true);
       const { data } = await update_todo(todo?._id as string, { status });
+      if (data.data?.status === "Complete") {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+      }
       dispatch(updateToDo(data.data));
       setUpdatingStatus(false);
     } catch (error) {
