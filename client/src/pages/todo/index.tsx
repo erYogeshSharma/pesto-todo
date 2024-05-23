@@ -23,7 +23,6 @@ const ToDoPage = () => {
 
   const { todos, isFetching } = useAppSelector((state) => state.todo);
 
-  console.log(filter);
   useEffect(() => {
     dispatch(getAllTodo(filter as string));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +94,7 @@ const ToDoPage = () => {
               </Stack>
               <Stack alignItems="center">
                 <Button variant="contained" onClick={handleCreateOpen}>
-                  Add Your First Task
+                  {filter ? "Create New Task" : "Add Your First Task"}
                 </Button>
               </Stack>
             </Stack>

@@ -8,7 +8,6 @@ export const signUp = createAsyncThunk<AuthResponse, SignUpForm>(
   "auth/sign_up",
   async (form, { rejectWithValue }) => {
     try {
-      console.log("hereh");
       const res = await API.sign_up(form);
       localStorage.setItem("token", JSON.stringify(res.data.data));
       return res.data;
