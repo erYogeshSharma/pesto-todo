@@ -7,6 +7,7 @@ import validateJWT from "../../middlewares/auth";
 import { ProtectedRequest } from "app-request";
 import todoRepo from "../../database/repositories/todoRepo";
 import { Types } from "mongoose";
+import Logger from "../core/Logger";
 const router = express.Router();
 
 router.use(validateJWT);
@@ -18,11 +19,11 @@ router.post(
   "/",
   validator(schema.create),
   asyncHandler(async (req: ProtectedRequest, res) => {
-    console.log({ user: req.user });
     const todo = await todoRepo.createTodo({
       ...req.body,
       user: req.user._id,
     });
+    Logger.info(`TODO CREATED == User:${user._id},Todo:todo._id`)
     new SuccessResponse("Todo created successfully", todo).send(res);
   })
 );
@@ -35,6 +36,7 @@ router.patch(
   validator(schema.update),
   asyncHandler(async (req: ProtectedRequest, res) => {
     const todo = await todoRepo.updateTodoById(req.params.id, req.body);
+    Logger.info(`TODO UPDATED == User:${req.user._id},Todo:req.params.id`)
     new SuccessResponse("Todo updated successfully", todo).send(res);
   })
 );
@@ -46,6 +48,7 @@ router.delete(
   "/:id",
   asyncHandler(async (req: ProtectedRequest, res) => {
     await todoRepo.deleteTodoById(req.params.id);
+    Logger.info(`TODO DELETED == User:${req.user._id},Todo:req.params.id`)
     new SuccessMsgResponse("Todo deleted successfully").send(res);
   })
 );
@@ -62,6 +65,7 @@ router.get(
       new Types.ObjectId(req.user._id),
       status || ""
     );
+    Logger.info(`TODO FETCHED == User:${req.user._id},Query:${status}`)
     new SuccessResponse("User Todos", todos).send(res);
   })
 );
