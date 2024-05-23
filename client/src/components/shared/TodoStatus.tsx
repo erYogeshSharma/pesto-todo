@@ -37,16 +37,18 @@ export default function ToDoStatusButton({ value, onChange, saving }: Props) {
     setOpen(false);
   };
 
+  // Closes the dropdown after saved
   React.useEffect(() => {
     if (!saving) {
       setOpen(false);
     }
   }, [saving]);
+
   return (
     <React.Fragment>
       <ButtonGroup
         size="small"
-        variant="outlined"
+        variant="contained"
         ref={anchorRef}
         color={
           value === "To Do"

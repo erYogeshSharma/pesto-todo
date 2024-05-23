@@ -17,7 +17,7 @@ import {
   openToDoForm,
   updateToDo,
 } from "../../store/to-do/to-do-slice";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, FilterVintage, Spa } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 
 const ToDoCard = ({ todo }: { todo: TODO }) => {
@@ -53,48 +53,68 @@ const ToDoCard = ({ todo }: { todo: TODO }) => {
   }
   return (
     <Paper>
-      <Stack p={2} spacing={1}>
-        <Stack direction="row" alignItems="center">
-          <Typography flexGrow={1} variant="h6" fontWeight={600}>
-            {todo.name}
+      <Stack p={2} spacing={2}>
+        <Stack spacing={1}>
+          <Stack direction="row" alignItems="center">
+            <Typography flexGrow={1} variant="h6" fontWeight={600}>
+              {todo.name}
+            </Typography>
+            <ButtonGroup variant="outlined" aria-label="Basic button group">
+              <Tooltip title="Edit To Do">
+                <Button
+                  onClick={handleEditTodo}
+                  size="small"
+                  variant="outlined"
+                  startIcon={<Edit />}
+                ></Button>
+              </Tooltip>
+              <Tooltip title="Delete To Do">
+                <LoadingButton
+                  loading={deleting}
+                  onClick={deleteTodo}
+                  size="small"
+                  variant="outlined"
+                  startIcon={<Delete />}
+                ></LoadingButton>
+              </Tooltip>
+            </ButtonGroup>
+          </Stack>
+          <Typography variant="body2" color="text.secondary">
+            {todo.description}{" "}
           </Typography>
-          <ButtonGroup variant="outlined" aria-label="Basic button group">
-            <Tooltip title="Edit To Do">
-              <Button
-                onClick={handleEditTodo}
-                size="small"
-                variant="outlined"
-                startIcon={<Edit />}
-              ></Button>
-            </Tooltip>
-            <Tooltip title="Delete To Do">
-              <LoadingButton
-                loading={deleting}
-                onClick={deleteTodo}
-                size="small"
-                variant="outlined"
-                startIcon={<Delete />}
-              ></LoadingButton>
-            </Tooltip>
-          </ButtonGroup>
         </Stack>
 
-        <Typography variant="body2" color="text.secondary">
-          {todo.description}{" "}
-        </Typography>
-        <Stack alignItems="flex-start" mt={2}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          alignItems="center"
+          justifyContent="space-between"
+          width="100%"
+          spacing={2}
+        >
           <ToDoStatusButton
             value={todo.status}
             saving={updatingStatus}
             onChange={handleStatusChange}
           />
-        </Stack>
-
-        {/* <ToDoChip status={todo.status} /> */}
-        <Stack alignItems="flex-end" width="100%">
-          <Typography variant="caption" color="text.secondary">
-            {moment(todo.createdAt).format("DD MMM YY, hh:MM A")}{" "}
-          </Typography>
+          <Stack>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Spa sx={{ fontSize: 18 }} color="success" />
+              <Typography variant="caption" color="text.secondary">
+                Planned
+                :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {moment(todo.createdAt).format("DD MMM YY, hh:MM A")}
+              </Typography>
+            </Stack>
+            {todo.status === "Complete" && (
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <FilterVintage sx={{ fontSize: 18 }} color="warning" />
+                <Typography variant="caption" color="text.secondary">
+                  Completed :&nbsp;&nbsp;
+                  {moment(todo.updatedAt).format("DD MMM YY, hh:MM A")}
+                </Typography>
+              </Stack>
+            )}
+          </Stack>
         </Stack>
       </Stack>
     </Paper>

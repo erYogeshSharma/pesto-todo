@@ -48,7 +48,7 @@ const ToDoPage = () => {
         <Stack direction="row" alignItems="center" spacing={1}>
           <ToDoFilter />
           <Button variant="contained" onClick={handleCreateOpen}>
-            Create
+            Create Todo
           </Button>
         </Stack>
       </Stack>

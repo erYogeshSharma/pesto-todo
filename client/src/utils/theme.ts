@@ -1,4 +1,4 @@
-import { grey, orange, teal } from "@mui/material/colors";
+import { green, grey, orange, red, teal, yellow } from "@mui/material/colors";
 import { ThemeOptions } from "@mui/material/styles";
 
 export const inter = `"Sora", sans-serif`;
@@ -45,12 +45,26 @@ const getTheme = (mode: mode): ThemeOptions => ({
   },
   palette: {
     mode: mode,
-    primary: { ...primary, contrastText: "#fff" },
+    primary: {
+      ...primary,
+      main: mode === "light" ? primary[500] : primary[300],
+      contrastText: mode === "light" ? "#fff" : grey[900],
+    },
     secondary: secondary,
 
     background: {
       default: mode === "light" ? primary[50] : grey[900],
       paper: mode === "light" ? "#fff" : grey[800],
+    },
+    success: {
+      main: mode === "light" ? green[500] : green[300],
+      contrastText: mode === "light" ? "#fff" : grey[900],
+    },
+    error: {
+      main: mode === "light" ? red[500] : red[200],
+    },
+    warning: {
+      main: mode === "light" ? yellow[500] : yellow[300],
     },
   },
   shape: {
