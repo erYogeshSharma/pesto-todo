@@ -73,14 +73,18 @@ router.post(
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = await userRepo.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: passwordHash,
     });
 
     // Create a JWT token
-    const token = jwt.sign({ email: newUser.email, name: newUser.name, picture: newUser.picture }, config.jwtSecret, {
-      expiresIn: config.tokenExp,
-    });
+    const token = jwt.sign(
+      { email: newUser.email, name: newUser.name, picture: newUser.picture },
+      config.jwtSecret,
+      {
+        expiresIn: config.tokenExp,
+      }
+    );
 
     new SuccessResponse("Register Success", { user: newUser, token }).send(res);
   })
@@ -95,7 +99,7 @@ router.post(
   asyncHandler(async (req: PublicRequest, res) => {
     const { email, password } = req.body;
 
-    const userExits = await userRepo.findByEmail(email);
+    const userExits = await userRepo.findByEmail(email.toLowerCase());
     if (!userExits) {
       throw new BadRequestError("User not registered");
     }
@@ -107,11 +111,22 @@ router.post(
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: userExits._id, email: userExits.email }, config.jwtSecret, {
-      expiresIn: config.tokenExp,
-    });
+    const token = jwt.sign(
+      { userId: userExits._id, email: userExits.email },
+      config.jwtSecret,
+      {
+        expiresIn: config.tokenExp,
+      }
+    );
 
-    new SuccessResponse("Login Successful", { user: { email: userExits.email, name: userExits.name, picture: userExits.picture }, token }).send(res);
+    new SuccessResponse("Login Successful", {
+      user: {
+        email: userExits.email,
+        name: userExits.name,
+        picture: userExits.picture,
+      },
+      token,
+    }).send(res);
   })
 );
 

@@ -36,11 +36,11 @@ export const updateTodo = createAsyncThunk<TODO, TODO>(
   }
 );
 
-export const getAllTodo = createAsyncThunk<TODO[], void>(
+export const getAllTodo = createAsyncThunk<TODO[], string>(
   "todo/getAll",
-  async (_, { rejectWithValue }) => {
+  async (filter, { rejectWithValue }) => {
     try {
-      const { data } = await API.get_todos();
+      const { data } = await API.get_todos(filter);
       return data.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

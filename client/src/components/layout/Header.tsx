@@ -8,8 +8,10 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import logo from "../../assets/logo.png";
 import { LogoutOutlined } from "@mui/icons-material";
 import { signOut } from "../../store/auth/auth-slice";
+import { useNavigate } from "react-router-dom";
 export default function Header() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
   function handleLogOut() {
@@ -27,7 +29,11 @@ export default function Header() {
         }}
       >
         <Toolbar>
-          <Stack flexGrow={1}>
+          <Stack
+            flexGrow={1}
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
             <Stack spacing={1} height={45} alignItems="center" direction="row">
               <img src={logo} style={{ maxHeight: "100%", maxWidth: "100%" }} />
               <Typography

@@ -7,8 +7,8 @@ type Token = {
 };
 
 const API = axios.create({
-  baseURL: "https://mapi.zapminds.com/todo",
-  // baseURL: "http://localhost:8080",
+  baseURL: "https://mapi.zapminds.com/v1",
+  // baseURL: "http://localhost:8080/v1",
   // baseURL: "https://9b37-2406-7400-98-df77-61dd-533e-fa3d-9f42.ngrok-free.app/",
 });
 
@@ -37,6 +37,8 @@ export const sign_up = (form: SignUpForm) => API.post(`/auth/register`, form);
 
 //TODO
 export const create_todo = (todo: TODO) => API.post(`/todo`, todo);
-export const get_todos = () => API.get(`/todo`);
-export const update_todo = (id: string, todo: Partial<TODO>) => API.patch(`/todo/${id}`, todo);
+export const get_todos = (filter: string) =>
+  API.get(`/todo?status=${filter || ""}`);
+export const update_todo = (id: string, todo: Partial<TODO>) =>
+  API.patch(`/todo/${id}`, todo);
 export const delete_todo = (id: string) => API.delete(`/todo/${id}`);

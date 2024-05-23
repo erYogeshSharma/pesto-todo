@@ -1,20 +1,33 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getAllTodo } from "../../store/to-do/to-do-api";
-import { Button, Grid, Skeleton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Skeleton,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import ToDoCard from "../../components/shared/ToDoCard";
 import ToDoForm from "../../components/form/ToDoForm";
 import { openToDoForm } from "../../store/to-do/to-do-slice";
+import { useSearchParams } from "react-router-dom";
+import ToDoFilter from "../../components/shared/ToDoFilter";
 
 const ToDoPage = () => {
   const dispatch = useAppDispatch();
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  const [searchParams] = useSearchParams();
+  const filter = searchParams.get("status");
 
   const { todos, isFetching } = useAppSelector((state) => state.todo);
 
+  console.log(filter);
   useEffect(() => {
-    dispatch(getAllTodo());
+    dispatch(getAllTodo(filter as string));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filter]);
 
   function handleCreateOpen() {
     dispatch(openToDoForm({ name: "", description: "", status: "To Do" }));
@@ -24,16 +37,20 @@ const ToDoPage = () => {
       <ToDoForm />
       <Stack
         py={2}
-        direction="row"
+        spacing={2}
+        direction={{ xs: "column", sm: "row" }}
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h5" fontWeight={600}>
+        <Typography variant={isSmallScreen ? "h3" : "h5"} fontWeight={600}>
           Your To Do list
         </Typography>
-        <Button variant="contained" onClick={handleCreateOpen}>
-          Create
-        </Button>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <ToDoFilter />
+          <Button variant="contained" onClick={handleCreateOpen}>
+            Create
+          </Button>
+        </Stack>
       </Stack>
 
       <Stack mb={2} spacing={1}>
@@ -46,7 +63,9 @@ const ToDoPage = () => {
               sx={{ borderRadius: 1 }}
             />
           ))}
-        {todos.length > 0 && todos.map((todo) => <ToDoCard todo={todo} />)}
+        {!isFetching &&
+          todos.length > 0 &&
+          todos.map((todo) => <ToDoCard todo={todo} />)}
         {!isFetching && todos.length < 1 && (
           <Stack
             sx={{ minHeight: "70vh" }}
@@ -62,7 +81,9 @@ const ToDoPage = () => {
                     Welcome to Your To-Do List
                   </Typography>
                   <Typography variant="h6">
-                    You have no tasks at the moment
+                    {filter
+                      ? `You have no tasks with status ${filter}`
+                      : "You have no tasks at the moment"}
                   </Typography>
                 </Stack>
                 <Typography variant="subtitle1" color="text.secondary">

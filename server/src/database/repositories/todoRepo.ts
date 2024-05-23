@@ -14,7 +14,9 @@ async function createTodo(todo: Todo): Promise<Todo> {
 
 async function updateTodoById(id: string, todo: Todo): Promise<Todo | null> {
   try {
-    const updatedTodo = await TodoModel.findByIdAndUpdate(id, todo, { new: true }).exec();
+    const updatedTodo = await TodoModel.findByIdAndUpdate(id, todo, {
+      new: true,
+    }).exec();
     return updatedTodo;
   } catch (error) {
     throw new Error(error as string);
@@ -30,21 +32,20 @@ async function deleteTodoById(id: string): Promise<Todo | null> {
   }
 }
 
-async function getTodoByStatus(status: string): Promise<Todo[]> {
+async function getUserTodos(
+  userId: Types.ObjectId,
+  status?: string
+): Promise<Todo[]> {
   try {
-    const todos = await TodoModel.find({ status }).sort({ createdAt: -1 }).exec();
-    return todos;
-  } catch (error) {
-    throw new Error(error as string);
-  }
-}
+    const query: { user: Types.ObjectId; status?: string } = { user: userId };
+    if (status && status !== "") {
+      query.status = status;
+    }
 
-async function getUserTodos(userId: Types.ObjectId): Promise<Todo[]> {
-  try {
-    const todos = await TodoModel.find({ user: userId }).sort({ createdAt: -1 }).exec();
+    const todos = await TodoModel.find(query).sort({ createdAt: -1 }).exec();
     return todos;
   } catch (error) {
     throw new Error(error as string);
   }
 }
-export default { createTodo, updateTodoById, deleteTodoById, getTodoByStatus, getUserTodos };
+export default { createTodo, updateTodoById, deleteTodoById, getUserTodos };

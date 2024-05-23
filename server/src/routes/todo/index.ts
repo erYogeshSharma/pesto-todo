@@ -54,8 +54,14 @@ router.delete(
 /* -------------------------------------------------------------------------- */
 router.get(
   "/",
+
   asyncHandler(async (req: ProtectedRequest, res) => {
-    const todos = await todoRepo.getUserTodos(new Types.ObjectId(req.user._id));
+    const status = req.query?.status as string;
+
+    const todos = await todoRepo.getUserTodos(
+      new Types.ObjectId(req.user._id),
+      status || ""
+    );
     new SuccessResponse("User Todos", todos).send(res);
   })
 );
