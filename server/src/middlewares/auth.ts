@@ -29,7 +29,7 @@ export default router.use(
       req.user = user;
       next();
     } catch (err) {
-      throw new BadRequestError("Invalid Token");
+      throw new BadRequestError("Invalid JWT Token");
     }
   })
 );

@@ -18,7 +18,6 @@ const initialState: AuthState = {
     picture: "",
   },
   token: "",
-
   //
   error: "",
   isAuthenticating: false,
