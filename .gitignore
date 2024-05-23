@@ -1,0 +1,6 @@
+/client/build
+/server/build
+/server/node_modules
+/client/node_modules
+/server/config.env
+/server/logs
