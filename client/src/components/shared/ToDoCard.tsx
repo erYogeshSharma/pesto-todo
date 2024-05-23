@@ -19,6 +19,7 @@ import {
 } from "../../store/to-do/to-do-slice";
 import { Delete, Edit, FilterVintage, Spa } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
+import { red, yellow } from "@mui/material/colors";
 
 const ToDoCard = ({ todo }: { todo: TODO }) => {
   const dispatch = useAppDispatch();
@@ -107,7 +108,13 @@ const ToDoCard = ({ todo }: { todo: TODO }) => {
             </Stack>
             {todo.status === "Complete" && (
               <Stack direction="row" alignItems="center" spacing={1}>
-                <FilterVintage sx={{ fontSize: 18 }} color="warning" />
+                <FilterVintage
+                  sx={{
+                    fontSize: 18,
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? yellow[300] : red[500],
+                  }}
+                />
                 <Typography variant="caption" color="text.secondary">
                   Completed :&nbsp;&nbsp;
                   {moment(todo.updatedAt).format("DD MMM YY, hh:MM A")}
