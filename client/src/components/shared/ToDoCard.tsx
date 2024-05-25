@@ -21,9 +21,10 @@ import confetti from "canvas-confetti";
 import { Delete, Edit, FilterVintage, Spa } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { red, yellow } from "@mui/material/colors";
-
+import beep from "../../assets/beep.mp3";
 const ToDoCard = ({ todo }: { todo: TODO }) => {
   const dispatch = useAppDispatch();
+  const audio = new Audio(beep);
 
   const [updatingStatus, setUpdatingStatus] = useState(false);
   async function handleStatusChange(status: ToDoStatus) {
@@ -32,6 +33,7 @@ const ToDoCard = ({ todo }: { todo: TODO }) => {
       setUpdatingStatus(true);
       const { data } = await update_todo(todo?._id as string, { status });
       if (data.data?.status === "Complete") {
+        audio.play();
         confetti({
           particleCount: 100,
           spread: 70,
